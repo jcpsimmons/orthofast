@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 2022_01_17_191458) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "fasting_days", force: :cascade do |t|
     t.date "date", null: false
     t.integer "fasting_code", null: false
