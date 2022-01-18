@@ -27,9 +27,11 @@
     var today = document.getElementById(id);
     var emoji = document.getElementById('day-tracker');
     var offset = window.pageYOffset + today.getBoundingClientRect().top;
-    var scaling = today.clientHeight / 24;
-    var timeOffset = (hours + 1) * scaling
-    emoji.style.transform = `translate(-50%, ${(offset - today.clientHeight / 2) + timeOffset}px)`;
+    var cardHeight = today.getBoundingClientRect().height;
+    var timeOffset = (cardHeight / 24) * (hours + 1)
+    emoji.style.transform = `translate(-50%, ${(offset - emoji.clientHeight - today.clientHeight / 2) + (timeOffset)}px)`;
+
+    // height of page - emoji height + (height of card - (height of card / 24) * hours)))
 
     if(hours + 1 < 6 || hours + 1 > 20) {
       emoji.innerHTML = '🌚';
