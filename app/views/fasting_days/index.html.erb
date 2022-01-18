@@ -1,27 +1,46 @@
-<div>
-  <h1>Greek Orthodox Fasting Restrictions for <%= @fasting_days.first.date.strftime("%B") %></h1>
-  <div class="calendar">
-    <% @fasting_days.each do |fasting_day| %>
-      <div id="day-<%= fasting_day.date.day %>" class="calendar-day">
-        <p><%= fasting_day.date.day.ordinalize %></p>
-        <p><%= fasting_day.get_readable_restriction %></p>
-      </div>
-    <% end %>
+<div class="mt-5">
+  <div class="container mb-7 px-2 w-full text-center mx-auto">
+    <h1 class="text-4xl font-bold">Greek Orthodox Fasting Restrictions for <%= @fasting_days.first.date.strftime("%B") %></h1>
+  </div>
+  <div class="flex justify-center">
+    <div class="flex flex-col items-center">
+      <% @fasting_days.each do |fasting_day| %>
+        <div id="day-<%= fasting_day.date.day %>" class="text-slate-900 shadow-lg shadow-slate-400/60 my-3 w-52 p-4 py-16 rounded">
+          <p class="text-2xl text-center"><%= fasting_day.date.day.ordinalize %></p>
+          <p class="text-center"><%= fasting_day.get_readable_restriction %></p>
+        </div>
+      <% end %>
+    </div>
+    <div class="border-4 border-black h-100 ml-10 rounded relative">
+      <div class="absolute text-4xl" id="day-tracker">🌞</div>
+    </div>
   </div>
 </div>
-<div class="footer">
-  <p>Made in 🇺🇸 by <a href="https://joshcsimmons.com">Josh C. Simmons</a></p>
+<div class="text-center py-8">
+  <p class="text-xl">Made in 🇺🇸 by <a class="text-sky-500 underline" href="https://joshcsimmons.com">Josh C. Simmons</a></p>
 </div>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     var date = new Date().getDate();
+    var hours = new Date().getHours();
     var id = 'day-' + date;
     var today = document.getElementById(id);
-    today.classList.add('today');
+    var emoji = document.getElementById('day-tracker');
+    var offset = window.pageYOffset + today.getBoundingClientRect().top;
+    var scaling = today.clientHeight / 24;
+    var timeOffset = (hours + 1) * scaling
+    emoji.style.transform = `translate(-50%, ${(offset - today.clientHeight / 2) + timeOffset}px)`;
 
-    today.scrollIntoView({
-        block: 'center',
-        behavior: 'smooth'
-    });
-  }, false);
+    if(hours + 1 < 6 || hours + 1 > 20) {
+      emoji.innerHTML = '🌚';
+    } else if(hours + 1 < 12) {
+      emoji.innerHTML = '🌞';
+    } else if(hours + 1 < 18) {
+      emoji.innerHTML = '🌝';
+    } else {
+      emoji.innerHTML = '🌚';
+    }
+
+    today.classList.add("border-4", "border-t-black");
+    today.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, false);
 </script>

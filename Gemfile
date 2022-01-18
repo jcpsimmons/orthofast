@@ -76,3 +76,5 @@ gem "pry-rails", "~> 0.3.9"
 gem "jquery-rails", "~> 4.4"
 
 gem "pg", "~> 1.2"
+
+gem "cssbundling-rails", "~> 1.0"
