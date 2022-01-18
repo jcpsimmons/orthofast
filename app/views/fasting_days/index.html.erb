@@ -1,18 +1,32 @@
 <div class="mt-5">
   <div class="container mb-7 px-2 w-full text-center mx-auto">
-    <h1 class="text-4xl font-bold">Greek Orthodox Fasting Restrictions for <%= @fasting_days.first.date.strftime("%B") %></h1>
+    <h1 class="text-4xl font-bold">Greek Orthodox Fasting Restrictions for <%= @fasting_days.first.date.strftime("%B %Y") %></h1>
   </div>
   <div class="flex justify-center">
     <div class="flex flex-col items-center">
       <% @fasting_days.each do |fasting_day| %>
-        <div id="day-<%= fasting_day.date.day %>" class="text-slate-900 shadow-lg shadow-slate-400/60 my-3 w-52 p-4 py-16 rounded">
-          <p class="text-2xl text-center"><%= fasting_day.date.day.ordinalize %></p>
-          <p class="text-center"><%= fasting_day.get_readable_restriction %></p>
-        </div>
+        <% if fasting_day.fasting_code.to_i > 0 %>
+          <%= link_to foods_path(restriction_code: fasting_day.fasting_code) do %>
+            <div id="day-<%= fasting_day.date.day %>" class="text-slate-900 shadow-lg shadow-slate-400/60 my-3 w-52 p-4 py-16 rounded hover:scale-105 transform-gpu ease-in-out duration-150 cursor-pointer">
+              <p class="text-2xl text-center"><%= fasting_day.date.day.ordinalize %></p>
+              <p class="text-center"><%= fasting_day.get_readable_restriction %></p>
+            </div>
+          <% end %>
+        <% else %>
+          <div id="day-<%= fasting_day.date.day %>" class="text-slate-900 shadow-lg shadow-slate-400/60 my-3 w-52 p-4 py-16 rounded">
+            <p class="text-2xl text-center"><%= fasting_day.date.day.ordinalize %></p>
+            <p class="text-center"><%= fasting_day.get_readable_restriction %></p>
+          </div>
+        <% end %>
       <% end %>
     </div>
-    <div class="border-4 border-black h-100 ml-10 rounded relative">
-      <div class="absolute text-4xl" id="day-tracker">🌞</div>
+    <div class="border-4 border-black h-100 ml-10 rounded relative font-bold">
+      <div class="absolute text-4xl flex" id="day-tracker"></div>
+      <div class="ml-12 absolute text-lg flex text-gray-700" id="helper-text">
+        <div class="h-4 w-4 border-t-2 border-t-gray-400 border-l-2 border-l-gray-400 absolute top-0 left-0"></div>
+        <div class="whitespace-nowrap origin-bottom-left rotate-90 -translate-y-4 font-mono">
+          Click restrictions to get meal ideas.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -26,12 +40,14 @@
     var id = 'day-' + date;
     var today = document.getElementById(id);
     var emoji = document.getElementById('day-tracker');
+    var helperText = document.getElementById('helper-text');
+
     var offset = window.pageYOffset + today.getBoundingClientRect().top;
     var cardHeight = today.getBoundingClientRect().height;
     var timeOffset = (cardHeight / 24) * (hours + 1)
-    emoji.style.transform = `translate(-50%, ${(offset - emoji.clientHeight - today.clientHeight / 2) + (timeOffset)}px)`;
 
-    // height of page - emoji height + (height of card - (height of card / 24) * hours)))
+    emoji.style.transform = `translate(-50%, ${(offset - emoji.clientHeight - today.clientHeight / 2) + (timeOffset)}px)`;
+    helperText.style.transform = `translateY(${(offset - (helperText.clientWidth) - today.clientHeight / 2) + (timeOffset)}px)`;
 
     if(hours + 1 < 6 || hours + 1 > 20) {
       emoji.innerHTML = '🌚';
@@ -43,6 +59,7 @@
       emoji.innerHTML = '🌚';
     }
 
-    today.classList.add("border-4", "border-t-black");
-    today.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, false);
+    today.classList.add("border-t-4", "border-t-black");
+    today.scrollIntoView({ block: 'center', behavior: 'smooth' });
+     }, false);
 </script>
