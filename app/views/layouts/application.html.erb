@@ -9,6 +9,23 @@
     <%= javascript_importmap_tags %>
   </head>
   <body>
+    <div class="fixed top-0 left-0 right-0 py-4 bg-white text-slate-900 shadow-lg shadow-slate-400/60 z-10 font-bold">
+      <div class="flex justify-center items-center">
+        <%= image_tag 'goarch-cross.png', class: "h-6 mr-1" %>
+        <h1 class="text-center text-2xl">Orthofast</h1>
+      </div>
+      <div class="absolute right-0 top-1/2 -translate-x-1/2 -translate-y-1/2 px-4 cursor-pointer" id="nationality">
+        <span>🇬🇷</span>
+      </div>
+    </div>
+    <div class="w-full h-16">hello</div>
     <%= yield %>
   </body>
+  <script>
+    document.addEventListener('click', (e)=>{
+      if(e.target.id == 'nationality'){
+        alert('More options coming soon!')
+      }
+    });
+  </script>
 </html>
