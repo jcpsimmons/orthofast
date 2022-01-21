@@ -23,10 +23,12 @@
     <%= yield %>
   </body>
   <script>
-    document.addEventListener('click', (e)=>{
-      if(e.target.id == 'nationality'){
-        alert('More options coming soon!')
-      }
-    });
+    document.addEventListener('DOMContentLoaded', function () {
+      document.addEventListener('click', (e)=>{
+        if(e.target.id == 'nationality'){
+          alert('More options coming soon!')
+        }
+      });
+       }, false);
   </script>
 </html>
